@@ -1,5 +1,5 @@
 require("dotenv/config");
-// const apodRoutes = require('./routes/apodRoute');
+const apodRoutes = require('./routes/apodRoute');
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
@@ -11,6 +11,6 @@ mongoose.connect(process.env.DB_Connect, { useNewUrlParser: true }, () =>
 );
 app.use(express.static('APOD'));
 app.use(cors());
-// app.use("/planetary", apodRoutes);
+app.use("/planetary", apodRoutes);
 
 app.listen(process.env.PORT || port, () => console.log("server running"));
