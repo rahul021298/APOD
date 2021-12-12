@@ -1,0 +1,29 @@
+const express = require("express");
+const router = express.Router();
+const apodController = require(".././controller/apodController");
+
+router.get("/", async (req, res, err) => {
+  try {
+    const date = req.query.date
+      ? req.query.date
+      : new Date().toISOString().slice(0, 10);
+    const response = await apodController.getData(date);
+    if (response.data) {
+      if (response.data.media_type === "image") {
+        await apodController.downloadImage(
+          response.data.url,
+          `./images/${date}.jpg`
+        );
+        response.data.url = `../APOD/images/${date}.jpg`;
+      }
+      apodController.insertData(response.data);
+      res.send(response.data);
+    } else {
+      res.send(response);
+    }
+  } catch (err) {
+    res.send({ message: err.message, stack: err.stack });
+  }
+});
+
+module.exports = router;
