@@ -55,6 +55,7 @@ function nasarequested(){
     mediaSection.innerHTML=imageSection;
     document.getElementById("hdimg").href=data.hdurl;
     document.getElementById("image_of_the_day").src=data.url;
+    console.log(data.url);
     }
     information.innerHTML=data.explanation
    }
