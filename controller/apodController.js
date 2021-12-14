@@ -5,6 +5,10 @@ const axios = require("axios");
 const baseURL = "https://api.nasa.gov/planetary/apod";
 const api_key = process.env.NASA_API_KEY;
 
+const  validateDate = (date) => {
+  const regex = new RegExp("([0-9]{4}[-](0[1-9]|1[0-2])[-]([0-2]{1}[0-9]{1}|3[0-1]{1})|([0-2]{1}[0-9]{1}|3[0-1]{1})[-](0[1-9]|1[0-2])[-][0-9]{4})");
+  return regex.test(date);
+}
 
 const insertData = (data) => {
   Apod.create(data);
@@ -50,5 +54,6 @@ const downloadImage = async (url, dest) => {
 module.exports = {
   insertData,
   getData,
-  downloadImage
+  downloadImage,
+  validateDate
 };

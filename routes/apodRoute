@@ -1,22 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const apodController = require(".././controller/apodController");
-const path = require('path');
 
 router.get("/", async (req, res, err) => {
   try {
-    const dateTocheck = req.query.date
-      ? req.query.date
-      : new Date().toISOString().slice(0, 10);
+    let maxDay = new Date().getUTCDate();
+    let maxYear = new Date().getUTCFullYear();
+    let maxMonth = new Date().getUTCMonth();
+    const maxDate = `${maxYear}-${maxMonth + 1}-${maxDay}`;
+    const minDate = "1995-06-16";
+    const dateTocheck = req.query.date ? req.query.date : maxDate;
+    if (!apodController.validateDate(dateTocheck)) {
+      throw {description: "Invalid Input Error", message: "Invalid Date Format",}
+    }
+    if (dateTocheck > maxDate || dateTocheck < minDate) {
+      throw {
+        description: "Invalid Input Error",
+        message: `Date must be between ${minDate} and ${maxDate}.`,
+      };
+    }
     const response = await apodController.getData(dateTocheck);
     if (response.data) {
-      console.log("FROM API: "+response.data)
+      console.info("FROM API: " + response.data);
       if (response.data.media_type === "image") {
         await apodController.downloadImage(
           response.data.url,
           `./images/${dateTocheck}.jpg`
-        );        
-        response.data.url =`../images/${dateTocheck}.jpg`;
+        );
+        response.data.url = `../images/${dateTocheck}.jpg`;
       }
       apodController.insertData(response.data);
       res.send(response.data);
@@ -24,7 +35,12 @@ router.get("/", async (req, res, err) => {
       res.send(response);
     }
   } catch (err) {
-    res.send({ message: err.message, stack: err.stack });
+    res.status(400);
+    res.send({
+      description: err.description,
+      message: err.message,
+      stack: err.stack,
+    });
   }
 });
 

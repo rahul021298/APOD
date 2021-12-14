@@ -5,11 +5,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
 const { cwd } = require("process");
-const app = express();
 const port = 3000;
-const adopController = require("./controller/apodController")
-app.use(cors());
+const app = express();
 
+app.use(cors());
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
