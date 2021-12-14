@@ -11,7 +11,10 @@ router.get("/", async (req, res, err) => {
     const minDate = "1995-06-16";
     const dateTocheck = req.query.date ? req.query.date : maxDate;
     if (!apodController.validateDate(dateTocheck)) {
-      throw {description: "Invalid Input Error", message: "Invalid Date Format",}
+      throw {
+        description: "Invalid Input Error",
+        message: "Invalid Date Format",
+      };
     }
     if (dateTocheck > maxDate || dateTocheck < minDate) {
       throw {

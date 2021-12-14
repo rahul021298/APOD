@@ -63,7 +63,7 @@ const downloadImage = async (url, dest) => {
         reject(error);
       });
   }).catch((error) => {
-    console.log(`Something happened: ${error}`);
+    console.error(`Download Failed: ${error}`);
   });
 };
 

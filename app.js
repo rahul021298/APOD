@@ -41,4 +41,4 @@ app.get('/', function(req,res){
   var pathName = path.join(__dirname,'./public/index.html');
   res.sendFile(pathName);
 });
-app.listen(process.env.PORT || port, () => console.log("server running: "+cwd()));
+app.listen(process.env.PORT || port, () => console.info("server running: "+cwd()));
