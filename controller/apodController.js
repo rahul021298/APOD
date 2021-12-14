@@ -6,20 +6,19 @@ const baseURL = "https://api.nasa.gov/planetary/apod";
 const api_key = process.env.NASA_API_KEY;
 
 
-const insertData = async (data) => {
+const insertData = (data) => {
   Apod.create(data);
 };
 
 const getData = async (date) => {
-    if ( date > new Date().toISOString().slice(0, 10)){
-      throw {error: 'Invalid Input Error', message: 'Future dates are not allowed'}
-    }
+  if ( date > new Date().toISOString().slice(0, 10)){
+    throw {error: 'Invalid Input Error', message: 'Future dates are not allowed'}
+  }
     const dateExist = await Apod.findOne({ date: date });
     if(dateExist){
         return dateExist
     } else{
-        const response = await axios.get(`${baseURL}?api_key=${api_key}&date=${date}`);
-        return response
+      return axios.get(`${baseURL}?api_key=${api_key}&date=${date}`).then(response => response).catch(err => {throw err});
     }
 };
 
