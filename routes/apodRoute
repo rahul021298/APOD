@@ -29,7 +29,7 @@ router.get("/", async (req, res, err) => {
         );
         response.data.url = `../images/${dateTocheck}.jpg`;
       }
-      apodController.insertData(response.data);
+      await apodController.insertData(response.data);
       res.send(response.data);
     } else {
       res.send(response);
